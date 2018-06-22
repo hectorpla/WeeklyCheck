@@ -1,8 +1,8 @@
-import { AppState } from "../types";
-import CardList from "../components/CardList/CardList";
-import * as actions from "../actions";
-import { DAY } from "../constants";
 import { connect, Dispatch } from 'react-redux';
+import * as actions from "../actions";
+import CardList from "../components/CardList/CardList";
+import { DAY } from "../constants";
+import { AppState } from "../types";
 
 
 export function mapStateToProps({ activeDay, currentTime }: AppState){

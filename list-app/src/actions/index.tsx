@@ -13,8 +13,8 @@ export type ToggleAction = ActivateDay | Deactivate;
 
 export function activate(day: constants.DAY): ActivateDay {
     return {
+        day,
         type: constants.ACTIVATE_DAY, // assign the value of type
-        day: day
     }
 }
 

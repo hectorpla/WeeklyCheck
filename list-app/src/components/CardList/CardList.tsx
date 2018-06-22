@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import DayCard from '../DayCard/DayCard';
 
-import { WEEK_DAY_ARRAY, DAY } from '../../constants/index';
+import { DAY, WEEK_DAY_ARRAY } from '../../constants/index';
 
 export interface Props {
     activeDay: DAY | void;
@@ -11,15 +11,24 @@ export interface Props {
     onDeactivate: () => void;
 }
 
-function CardList({ snapshotTime, activeDay }: Props) {
+function CardList({ snapshotTime, activeDay, onActiveDayChange, 
+  onDeactivate }: Props) {
+    
     return (
       <div className="container">
         {WEEK_DAY_ARRAY.map(day => {
+          function handleClick(event: React.MouseEvent<HTMLDivElement>) {
+            if (day === activeDay) {
+              onDeactivate();
+            } else {
+              onActiveDayChange(day);
+            }
+          }
           return (
-            <React.Fragment>
+            <div className="hoverable" key={day} onClick={handleClick}>
               <DayCard currentTime={snapshotTime} day={day}
                 isActive={!!activeDay && day === activeDay} />
-            </React.Fragment>
+            </div>
           )
         })}
       </div>

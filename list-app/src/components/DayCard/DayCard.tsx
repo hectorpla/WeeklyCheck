@@ -1,5 +1,6 @@
-import { DAY } from '../../constants/index';
 import * as React from 'react';
+
+import { DAY } from '../../constants/index';
 import { WEEK_DAYS } from '../../constants/index';
 
 export interface Props {
@@ -10,7 +11,7 @@ export interface Props {
 
 class DayCard extends React.Component<Props> {
 
-    render() {
+    public render() {
         const {day, currentTime, isActive} = this.props;
         return (
             <div className="row card-panel">
@@ -34,8 +35,9 @@ function addDays(date: Date, days: number): Date {
 } 
 
 // TODO: check implentation
+// TODO: Test
 function calculateDate(day: DAY, time: Date): Date {
-    const dayNum = WEEK_DAYS[day];
+    const dayNum = WEEK_DAYS[day] - time.getDay();
     const calculatedTime = addDays(time, dayNum);
     return calculatedTime;
 }
