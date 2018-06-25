@@ -1,6 +1,6 @@
 import { DAYS } from '../constants/index';
 
-export interface AppState {
+export interface DayToggleState {
     activeDay: DAYS | void;
     currentTime: Date;
 }
@@ -28,6 +28,12 @@ export interface DayCardTaskLists {
     nextWeekTask?: DailyTaskList;
 }
 
-export type WeeklyTasks = {
+// to store the whole message of the task lists
+// actually strictly two weeks for per day in runtime
+export type TasksOfRecentWeeks = {
+    [day in DAYS]: DayCardTaskLists;
+}
+
+export type ActiveCardListOnDays = {
     [day in DAYS]: DailyTaskList;
 }
