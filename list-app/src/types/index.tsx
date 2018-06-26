@@ -1,8 +1,11 @@
 import { DAYS } from '../constants/index';
 
+/*
+* sub-store for active DayCard
+*/
 export interface DayToggleState {
     activeDay: DAYS | void;
-    currentTime: Date;
+    currentTime: Date; // put here?
 }
 
 /*
@@ -22,18 +25,26 @@ export type DailyTaskList = Task[];
 /*  
 * For previous/next week
 */
-export interface DayCardTaskLists {
-    prevWeekTasks?: DailyTaskList;
-    curWeekTasks: DailyTaskList;
-    nextWeekTask?: DailyTaskList;
+export interface PrevCurNextTaskLists {
+    prev?: DailyTaskList;
+    cur: DailyTaskList;
+    next?: DailyTaskList;
 }
+export type PrevCurNextKey = keyof PrevCurNextTaskLists;
 
 // to store the whole message of the task lists
 // actually strictly two weeks for per day in runtime
 export type TasksOfRecentWeeks = {
-    [day in DAYS]: DayCardTaskLists;
+    [day in DAYS]: PrevCurNextTaskLists;
 }
 
-export type ActiveCardListOnDays = {
-    [day in DAYS]: DailyTaskList;
+// sub-store: active week for a DayCard
+export type ActiveWeekOnDays = {
+    [day in DAYS]: PrevCurNextKey;
+}
+
+export interface AppState {
+    activeDaySlice: DayToggleState,
+    activeWeekSlice: ActiveWeekOnDays,
+    allTaskListSlice: TasksOfRecentWeeks
 }

@@ -1,8 +1,8 @@
 import { ToggleAction } from '../actions/index';
 import { ACTIVATE_DAY, DEACTIVATE } from '../constants/index';
-import { AppState } from '../types/index';
+import { DayToggleState } from '../types/index';
 
-export function dayActivationReducer(state: AppState, action: ToggleAction): AppState {
+export function dayActivationReducer(state: DayToggleState, action: ToggleAction): DayToggleState {
     switch(action.type) {
         case ACTIVATE_DAY: 
             return {...state, activeDay: action.day};
