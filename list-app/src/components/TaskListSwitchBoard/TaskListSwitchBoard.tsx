@@ -1,17 +1,22 @@
 import * as React from 'react';
 import { DAYS } from '../../constants';
-import TaskList from '../TaskList/TaskList';
-import { PrevCurNextTaskLists, PrevCurNextKey } from '../../types';
+import TaskList from '../../containers/TaskList';
+import { PrevCurNextKey, PrevCurNextTaskLists } from '../../types';
 
+// only day is passed from the parent 
 export interface Props {
   day: DAYS;
-  activeWeek: PrevCurNextKey;
-  taskListOfWeeks: PrevCurNextTaskLists;
-  onWeekChange: (weekToActivate: PrevCurNextKey) => void;
+  activeWeek?: PrevCurNextKey;
+  taskListOfWeeks?: PrevCurNextTaskLists;
+  onWeekChange?: (weekToActivate: PrevCurNextKey) => void;
 }
 
 // TODO: add slide feature to switch prev/cur/next week
-function TaskListSwitchBoard({ day, activeWeek, taskListOfWeeks }: Props) {
+// activeWeek should never be undefined
+function TaskListSwitchBoard({ day, activeWeek = 'cur', taskListOfWeeks }: Props) {
+  if (!taskListOfWeeks) {
+    throw new Error("TaskListSwitchBoard: three lists of tasks not existing");
+  }
   const dayTaskList = taskListOfWeeks[activeWeek];
   return (
     <div>

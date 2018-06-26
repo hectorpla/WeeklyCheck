@@ -11,11 +11,6 @@ export const WEEK_DAYS = {
 export const WEEK_DAY_ARRAY: DAYS[] = 
     ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-export enum WeekActiveOnCard {
-    Prev,
-    Current,
-    Next,
-} 
 
 export const ACTIVATE_DAY = 'ACTIVATE_DAY';
 export type ACTIVATE_DAY = typeof ACTIVATE_DAY;

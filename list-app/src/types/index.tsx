@@ -1,14 +1,6 @@
 import { DAYS } from '../constants/index';
 
 /*
-* sub-store for active DayCard
-*/
-export interface DayToggleState {
-    activeDay: DAYS | void;
-    currentTime: Date; // put here?
-}
-
-/*
 * tentative type for a unit datum: task
 */
 export interface Task {
@@ -43,6 +35,17 @@ export type ActiveWeekOnDays = {
     [day in DAYS]: PrevCurNextKey;
 }
 
+/*
+* sub-store for active DayCard
+*/
+export interface DayToggleState {
+    activeDay: DAYS | void;
+    currentTime: Date; // put here?
+}
+
+/*
+* the overall states of the app
+*/
 export interface AppState {
     activeDaySlice: DayToggleState,
     activeWeekSlice: ActiveWeekOnDays,

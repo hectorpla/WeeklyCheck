@@ -29,12 +29,14 @@ export interface AddTaskOnDay {
     type: constants.ADD_TASK;
     task: types.Task;
     day: constants.DAYS;
+    week: types.PrevCurNextKey;
 }
 
 export interface RemoveTaskOnDay {
     type: constants.REMOVE_TASK;
     index: number;
     day: constants.DAYS;
+    week: types.PrevCurNextKey;
 }
 
 // TODO: add interface ModifyTask
@@ -46,7 +48,7 @@ export interface RemoveTaskOnDay {
 export interface ActivateWeekOnDay {
     type: constants.ACTIVATE_WEEK_ON_DAY;
     day: constants.DAYS;
-    activeWeek: constants.WeekActiveOnCard
+    activeWeek: types.PrevCurNextKey
 }
 
 /*
@@ -59,8 +61,8 @@ export type AppAction = ToggleAction | TaskAction | ActivateWeekOnDay;
 
 export function activate(day: constants.DAYS): ActivateDay {
     return {
-        day,
-        type: constants.ACTIVATE_DAY // assign the value of type
+        type: constants.ACTIVATE_DAY, // assign the value of type
+        day
     }
 }
 
@@ -74,27 +76,30 @@ export function deactivate(): Deactivate {
 * only action with a specific day should be generated
 * no need to define addTask(task)
 */
-export function addTaskOnDay(task: types.Task, day: constants.DAYS): AddTaskOnDay {
+// TODO: should be addTaskOnDate?
+export function addTaskOnDay(task: types.Task, day: constants.DAYS, 
+        week: types.PrevCurNextKey): AddTaskOnDay {
     return {
         type: constants.ADD_TASK,
         task,
-        day
+        day,
+        week
     }
 }
 
-export function removeTaskOnDay(index: number, day: constants.DAYS): RemoveTaskOnDay {
+export function removeTaskOnDay(index: number, day: constants.DAYS,
+        week: types.PrevCurNextKey): RemoveTaskOnDay {
     return {
         type: constants.REMOVE_TASK,
         index,
-        day
+        day,
+        week
     }
 }
 
-// TODO: should be addTaskOnDate
-
 export function setActiveWeekOnDay(day: constants.DAYS, 
-        weekToActivate: constants.WeekActiveOnCard): ActivateWeekOnDay {
-    return {
+        weekToActivate: types.PrevCurNextKey): ActivateWeekOnDay {
+            return {
         type: constants.ACTIVATE_WEEK_ON_DAY,
         day,
         activeWeek: weekToActivate

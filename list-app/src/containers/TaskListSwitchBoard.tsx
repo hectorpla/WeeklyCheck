@@ -1,20 +1,26 @@
 import { connect, Dispatch } from 'react-redux';
 import * as actions from "../actions";
-import { ActiveWeekOnDays, PrevCurNextKey } from '../types';
 import TaskListSwitchBoard, { Props } from '../components/TaskListSwitchBoard/TaskListSwitchBoard';
+import { AppState, PrevCurNextKey } from '../types';
 
-export function mapStateToProps(week: ActiveWeekOnDays, ownProps: Props) {
+export function mapStateToProps(state: AppState, ownProps: Props) {
+    const { activeWeekSlice, allTaskListSlice } = state;
+    const { day } = ownProps;
+    const taskListOfWeeks = allTaskListSlice[day];
+    const activeWeek = activeWeekSlice[day];
+    
     return {
-        ...ownProps,
-        activeWeek: week[ownProps.day]
+        day,
+        activeWeek,
+        taskListOfWeeks
     }
 }
 
 export function mapDispatchToProps(dispatch: Dispatch<actions.ActivateWeekOnDay>,
-        ownProps: Props) {
+    ownProps: Props) {
     const { day } = ownProps;
     return {
-        onWeekChange: (week: PrevCurNextKey) => actions.setActiveWeekOnDay(day, week)
+        onWeekChange: (week: PrevCurNextKey) => dispatch(actions.setActiveWeekOnDay(day, week))
     }
 }
 

@@ -4,18 +4,34 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import { ToggleAction } from './actions';
+import { applyMiddleware, createStore } from 'redux';
+import logger from 'redux-logger';
+import { AppAction } from './actions';
 import { WEEK_DAY_ARRAY } from './constants';
 import CardList from './containers/CardList';
-import { appReducer } from './reducers/index';
+import rootReducer from './reducers/index';
 import { AppState } from './types/index';
 
-// complaints: new APIs?
-const store = createStore<AppState, ToggleAction, any, any>(appReducer, {
-  activeDay: WEEK_DAY_ARRAY[new Date().getDay()],
-  currentTime: new Date()
-});
+// function createInitActiveWeek(): PrevCurNextKey {
+//   return 'cur';
+// }
+
+// function createInitWeekTasks(): PrevCurNextTaskLists {
+//   return {
+//     cur: []
+//   };
+// }
+
+// fixed the generics
+// too much boilerplate
+const store = createStore<AppState, AppAction, any, any>(rootReducer, {
+  activeDaySlice: {
+    activeDay: WEEK_DAY_ARRAY[new Date().getDay()],
+    currentTime: new Date()
+  },
+},
+  applyMiddleware(logger)
+);
 
 ReactDOM.render(
   <Provider store={store}>
