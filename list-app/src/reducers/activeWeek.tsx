@@ -21,7 +21,6 @@ function createInitActiveWeek(): PrevCurNextKey {
 export function dayCardWeekActivationReducer(state: ActiveWeekOnDays = createInitState(),
     action: ActivateWeekOnDay): ActiveWeekOnDays {
     const { day, activeWeek } = action;
-    // alert(action.type);
     switch (action.type) {
         case ACTIVATE_WEEK_ON_DAY:
             return {

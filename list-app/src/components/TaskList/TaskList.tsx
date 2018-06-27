@@ -1,7 +1,10 @@
+import * as Debug from 'debug';
 import * as React from 'react';
 import { DAYS } from '../../constants';
 import { PrevCurNextKey, Task } from '../../types';
 import TaskItem from '../TaskItem/TaskItem';
+
+const debug = Debug('component:TaskList');
 
 // think again: too much information for a list?
 // should the callbacks be optional?
@@ -14,10 +17,9 @@ export interface Props {
 }
 
 // TODO: add insert/remove feature
-// 
 function TaskList({ taskList = [], addTask }: Props) {
   // TODO: might be not very suitable to do this logic in component
-  const handleSubmission = (e: React.FormEvent<HTMLInputElement>) => {
+  const handleSubmission = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (taskList.length >= 5) {
@@ -27,15 +29,19 @@ function TaskList({ taskList = [], addTask }: Props) {
       throw Error("component TaskList: addTask method should exist");
       return;
     }
+    const code = e.currentTarget.value;
+    debug(`get ${code}, parsed code ${+code}`);
     addTask({
-      code: parseInt(e.currentTarget.value, 10)
+      code: +code
     });
   }
 
   return (
     <div>
-      <div> Type your tasks: </div>
-      <input type="number" onSubmit={handleSubmission} />
+      <form onSubmit={handleSubmission}>
+        <label> Type your tasks: </label>
+        <input type="text" />
+      </form>
       {
         taskList.map((item, index) =>
           <TaskItem key={index} item={item} />

@@ -1,67 +1,86 @@
+import * as Debug from 'debug';
 import { TaskAction } from "../actions";
 import { ADD_TASK, REMOVE_TASK } from "../constants";
-import { DailyTaskList, PrevCurNextTaskLists, TasksOfRecentWeeks } from "../types";
+import { DailyTaskList, PrevCurNextTaskLists, Task, TasksOfRecentWeeks } from "../types";
 
 // the interface and the function should be coupled
 export type TaskReducer = (state: DailyTaskList, action: TaskAction) => DailyTaskList;
 
-// TODO: wanted to reuse this implementation
-// export function taskReducer(state: DailyTaskList = [], action: TaskAction): DailyTaskList {
-//     switch(action.type) {
-//         case ADD_TASK:
-//             // TODO: to check length
-//             return [...state, action.task];
-//         case REMOVE_TASK:
-//             let newState = [...state];
-//             newState.splice(action.index, 1);
-//             return newState;
-//     }
-//     return state;
-// }
-
-function createInitWeekTasks(): PrevCurNextTaskLists {
+function createInitThreeWeekTasks(): PrevCurNextTaskLists {
     return {
         cur: []
     };
 }
 
-function createInitState() {
+export function createInitAllWeekTasks() {
     return {
-        Monday: createInitWeekTasks(),
-        Tuesday: createInitWeekTasks(),
-        Wednesday: createInitWeekTasks(),
-        Thursday: createInitWeekTasks(),
-        Friday: createInitWeekTasks(),
-        Saturday: createInitWeekTasks(),
-        Sunday: createInitWeekTasks()
+        Monday: createInitThreeWeekTasks(),
+        Tuesday: createInitThreeWeekTasks(),
+        Wednesday: createInitThreeWeekTasks(),
+        Thursday: createInitThreeWeekTasks(),
+        Friday: createInitThreeWeekTasks(),
+        Saturday: createInitThreeWeekTasks(),
+        Sunday: createInitThreeWeekTasks()
     };
 }
 
-export function taskMultiplexReducer(state: TasksOfRecentWeeks = createInitState(),
+// TODO: enable debug in browser, in console: localStorage.debug = 'worker:*' 
+const debugNamespace = 'reducer:task';
+const debug = Debug(debugNamespace);
+
+export function taskMultiplexReducer(state: TasksOfRecentWeeks = createInitAllWeekTasks(),
     action: TaskAction): TasksOfRecentWeeks {
+    debug(`state ${JSON.stringify(state)}, action: ${JSON.stringify(action)}`);
     if (!state || !action.day) { // TODO: for test
         return state;
     }
-    const { day, week } = action;
-    const listInState = state[day][week];
+    // const { day, week } = action;
+    // const listInState = state[day][week];
+    
+    // debug(`${day}, ${week}, ${listInState}`);
+    // alert(listInState);
 
-    if (!listInState) {
-        alert("taskMultiplexReducer: should not happend");
-        return state;
+    // if (!listInState) {
+    //     alert("taskMultiplexReducer: should not happend");
+    //     return state;
+    // }
+
+    function getTaskList() {
+        const { day, week } = action;
+        const list = state[day][week];
+        debug(`${day}, ${week}, ${listInState}`);
+
+        if (!list) {
+            alert("taskMultiplexReducer: should not happend");
+            return undefined;
+        }
+        return list;
     }
 
+    let listInState: Task[] | void
     switch (action.type) {
         case ADD_TASK:
+            listInState = getTaskList();
+            if (!listInState) {
+                return state;
+            }
             return {
                 ...state,
-                [day]: [...listInState, action.task]
+                [action.day]: [...listInState, action.task]
             }
         case REMOVE_TASK:
+            // TODO: duplicate code
+            listInState = getTaskList();
+            if (!listInState) {
+                return state;
+            }
             const taskList = [...listInState];
             taskList.splice(action.index, 1);
             return {
                 ...state,
-                [day]: taskList
+                [action.day]: taskList
             };
+        default:
+            return state;
     }
 }

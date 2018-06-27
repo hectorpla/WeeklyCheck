@@ -9,13 +9,13 @@ function createInitState() {
     }
 }
 
-export function dayActivationReducer(state: DayToggleState = createInitState(), 
-        action: ToggleAction): DayToggleState {
-    switch(action.type) {
-        case ACTIVATE_DAY: 
-            return {...state, activeDay: action.day};
+export function dayActivationReducer(state: DayToggleState = createInitState(),
+    action: ToggleAction): DayToggleState {
+    switch (action.type) {
+        case ACTIVATE_DAY:
+            return { ...state, activeDay: action.day };
         case DEACTIVATE:
-            return {...state, activeDay: undefined};
+            return { ...state, activeDay: undefined };
     }
     return state;
 }

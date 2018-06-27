@@ -18,8 +18,9 @@ function TaskListSwitchBoard({ day, activeWeek = 'cur', taskListOfWeeks }: Props
     throw new Error("TaskListSwitchBoard: three lists of tasks not existing");
   }
   const dayTaskList = taskListOfWeeks[activeWeek];
+  // TODO: rethink, prevent propogation on the level
   return (
-    <div>
+    <div onClick={seizeClickBubbling}>
       <div> {activeWeek} </div>
       { 
         !!dayTaskList ?
@@ -30,6 +31,10 @@ function TaskListSwitchBoard({ day, activeWeek = 'cur', taskListOfWeeks }: Props
       }
     </div>
   );
+}
+
+function seizeClickBubbling(e: React.MouseEvent<HTMLDivElement>) {
+  e.stopPropagation();
 }
 
 export default TaskListSwitchBoard;

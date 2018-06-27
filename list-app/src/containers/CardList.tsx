@@ -2,9 +2,10 @@ import { connect, Dispatch } from 'react-redux';
 import * as actions from "../actions";
 import CardList from "../components/CardList/CardList";
 import { DAYS } from "../constants";
-import { DayToggleState } from "../types";
+import { AppState } from "../types";
 
-export function mapStateToProps({ activeDay, currentTime }: DayToggleState) {
+export function mapStateToProps(state: AppState) {
+    const { activeDay, currentTime } = state.activeDaySlice;
     return {
         activeDay,
         snapshotTime: currentTime

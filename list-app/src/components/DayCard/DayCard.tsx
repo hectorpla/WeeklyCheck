@@ -19,7 +19,7 @@ function DayCard({ day, currentTime, isActive }: Props) {
   return (
     <div className="row card-panel">
       <div className=""> {day}, {calculateDate(day, currentTime).toDateString()} </div>
-      <div> Content... </div>
+      <div> Tiny Content... </div>
       {
         isActive && 
         <TaskListSwitchBoard day={day} />
