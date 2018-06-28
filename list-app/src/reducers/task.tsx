@@ -28,22 +28,15 @@ export function createInitAllWeekTasks() {
 const debugNamespace = 'reducer:task';
 const debug = Debug(debugNamespace);
 
+// TODO: must be a better way to structure the reducer, refer to Redux form
+
+// TODO: write test
 export function taskMultiplexReducer(state: TasksOfRecentWeeks = createInitAllWeekTasks(),
     action: TaskAction): TasksOfRecentWeeks {
     debug(`state ${JSON.stringify(state)}, action: ${JSON.stringify(action)}`);
     if (!state || !action.day) { // TODO: for test
         return state;
     }
-    // const { day, week } = action;
-    // const listInState = state[day][week];
-    
-    // debug(`${day}, ${week}, ${listInState}`);
-    // alert(listInState);
-
-    // if (!listInState) {
-    //     alert("taskMultiplexReducer: should not happend");
-    //     return state;
-    // }
 
     function getTaskList() {
         const { day, week } = action;
@@ -57,6 +50,18 @@ export function taskMultiplexReducer(state: TasksOfRecentWeeks = createInitAllWe
         return list;
     }
 
+    function replaceList(newState: TasksOfRecentWeeks, list: Task[]) {
+        // expect newState !== state
+        const { day, week } = action;
+        return {
+            ...newState,
+            [action.day]: {
+                ...newState[day],
+                [week]: list
+            }
+        }
+    }
+
     let listInState: Task[] | void
     switch (action.type) {
         case ADD_TASK:
@@ -64,10 +69,7 @@ export function taskMultiplexReducer(state: TasksOfRecentWeeks = createInitAllWe
             if (!listInState) {
                 return state;
             }
-            return {
-                ...state,
-                [action.day]: [...listInState, action.task]
-            }
+            return replaceList({...state}, [...listInState, action.task]);
         case REMOVE_TASK:
             // TODO: duplicate code
             listInState = getTaskList();
@@ -76,11 +78,8 @@ export function taskMultiplexReducer(state: TasksOfRecentWeeks = createInitAllWe
             }
             const taskList = [...listInState];
             taskList.splice(action.index, 1);
-            return {
-                ...state,
-                [action.day]: taskList
-            };
+            return replaceList({...state}, taskList);
         default:
             return state;
     }
-}
+} 

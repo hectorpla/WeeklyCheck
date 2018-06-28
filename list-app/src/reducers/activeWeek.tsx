@@ -28,7 +28,5 @@ export function dayCardWeekActivationReducer(state: ActiveWeekOnDays = createIni
                 [day]: activeWeek
             }
     }
-    // if (action.type)
-    //   throw Error("unexpected behavior");
     return state;
 }

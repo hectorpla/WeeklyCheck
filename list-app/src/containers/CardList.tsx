@@ -6,9 +6,11 @@ import { AppState } from "../types";
 
 export function mapStateToProps(state: AppState) {
     const { activeDay, currentTime } = state.activeDaySlice;
+    const activeWeeks = state.activeWeekSlice;
     return {
         activeDay,
-        snapshotTime: currentTime
+        activeWeeks,
+        snapshotTime: currentTime,
     }
 }
 

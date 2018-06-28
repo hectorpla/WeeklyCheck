@@ -4,7 +4,7 @@ import TaskListSwitchBoard, { Props } from '../components/TaskListSwitchBoard/Ta
 import { AppState, PrevCurNextKey } from '../types';
 
 export function mapStateToProps(state: AppState, ownProps: Props) {
-    const { activeWeekSlice, allTaskListSlice } = state;
+    const { activeDaySlice, activeWeekSlice, allTaskListSlice } = state;
     const { day } = ownProps;
     const taskListOfWeeks = allTaskListSlice[day];
     const activeWeek = activeWeekSlice[day];
@@ -12,7 +12,8 @@ export function mapStateToProps(state: AppState, ownProps: Props) {
     return {
         day,
         activeWeek,
-        taskListOfWeeks
+        taskListOfWeeks,
+        currentTime: activeDaySlice.currentTime
     }
 }
 

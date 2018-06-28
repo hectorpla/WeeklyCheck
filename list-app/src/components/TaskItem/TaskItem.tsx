@@ -10,9 +10,10 @@ export interface Props {
 function TaskItem({item}: Props) {
     return (
         <div> 
-            <span contentEditable={true}> {item.code} </span>
+            <span> {item.code} </span>
             :
-            <span contentEditable={true}> {item.subscription} </span>
+            <span> {item.subscription} </span>
+            {/* tags */}
         </div>
     );
 }
