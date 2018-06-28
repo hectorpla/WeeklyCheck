@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 // import { DailyTaskList } from '../types';
 // import { TaskAction } from '../actions';
 import { dayCardWeekActivationReducer } from './activeWeek';
@@ -19,7 +20,8 @@ import { taskMultiplexReducer  } from './task';
 export default combineReducers({
     activeDaySlice: dayActivationReducer,
     activeWeekSlice: dayCardWeekActivationReducer,
-    allTaskListSlice: taskMultiplexReducer
+    allTaskListSlice: taskMultiplexReducer,
+    form: formReducer,
 });
 
 // due to the nature of combineRed

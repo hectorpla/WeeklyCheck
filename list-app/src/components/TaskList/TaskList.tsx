@@ -1,6 +1,7 @@
 import * as Debug from 'debug';
 import * as React from 'react';
 import { DAYS } from '../../constants';
+import { TaskInputFormWithId } from '../../forms/TaskInputForm';
 import { PrevCurNextKey, Task } from '../../types';
 import TaskItem from '../TaskItem/TaskItem';
 
@@ -17,31 +18,27 @@ export interface Props {
 }
 
 // TODO: add insert/remove feature
-function TaskList({ taskList = [], addTask }: Props) {
-  // TODO: might be not very suitable to do this logic in component
-  const handleSubmission = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (taskList.length >= 5) {
-      alert("Number of tasks is at most 5 per day")
-    }
+function TaskList({ taskList = [], addTask, week, day }: Props) {
+  // first do integration without type
+  const submit = (values: any) => {
+    debug(`form values: ${values}`);
     if (!addTask) {
       throw Error("component TaskList: addTask method should exist");
       return;
     }
-    const code = e.currentTarget.value;
-    debug(`get ${code}, parsed code ${+code}`);
     addTask({
-      code: +code
+      code: values.code
     });
   }
 
+  // dynamically generated
+  const TaskInputForm = TaskInputFormWithId(day + '-' + week, false);
+  
+  const isTaskFull = taskList.length === 5;
+  
   return (
     <div>
-      <form onSubmit={handleSubmission}>
-        <label> Type your tasks: </label>
-        <input type="text" />
-      </form>
+      { !isTaskFull && <TaskInputForm onSubmit={submit} />}
       {
         taskList.map((item, index) =>
           <TaskItem key={index} item={item} />
