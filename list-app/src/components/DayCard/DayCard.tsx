@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { calculateDate } from '../../common';
+import { calculateRelativeDate } from '../../common';
 import { DAYS } from '../../constants/index';
 import TaskListSwitchBoard from '../../containers/TaskListSwitchBoard';
 import { PrevCurNextKey, PrevCurNextTaskLists } from '../../types';
@@ -32,7 +32,7 @@ function DayCard({ day, currentTime, isActive, activeWeek }: Props) {
   
   return (
     <div className={"row card-panel " + color}>
-      <div className=""> {day}, {calculateDate(day, currentTime).toDateString()} </div>
+      <div className=""> {day}, {calculateRelativeDate(day, currentTime).toDateString()} </div>
       {
         isActive && 
         <TaskListSwitchBoard day={day} />

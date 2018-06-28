@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { calculateDate, toMonthDateString } from '../../common';
+import { calculateRelativeDate, toMonthDateString } from '../../common';
 import { DAYS } from '../../constants';
 import TaskList from '../../containers/TaskList';
 import { PrevCurNextKey, PrevCurNextTaskLists } from '../../types';
@@ -19,12 +19,13 @@ function TaskListSwitchBoard({ day, activeWeek = 'cur', taskListOfWeeks, current
   if (!taskListOfWeeks) {
     throw new Error("TaskListSwitchBoard: three lists of tasks not existing");
   }
+
   const dayTaskList = taskListOfWeeks[activeWeek];
   // TODO: rethink, prevent propogation on the level
 
   // TODO: add one more layer to handle unfocused views
 
-  const dateString = toMonthDateString(calculateDate(day, currentTime!));
+  const dateString = toMonthDateString(calculateRelativeDate(day, currentTime!));
   return (
     <div onClick={seizeClickBubbling}>
       <div className="right"> {dateString} </div>
