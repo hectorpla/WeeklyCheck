@@ -7,38 +7,27 @@ import * as types from '../types/index';
 * action to activate day among Monday to Sunday
 */
 export interface ActivateDay {
-    type: constants.ACTIVATE_DAY // define the type of type
-    day: constants.DAYS 
+  type: constants.ACTIVATE_DAY // define the type of type
+  day: constants.DAYS
 }
 
 export interface Deactivate {
-    type: constants.DEACTIVATE
+  type: constants.DEACTIVATE
 }
 
 export interface AddTask {
-    type: constants.ADD_TASK;
-    task: types.Task;
+  type: constants.ADD_TASK;
+  day: constants.DAYS;
+  week: types.PrevCurNextKey;
+  task: types.Task;
 }
 
 export interface RemoveTask {
-    type: constants.REMOVE_TASK;
-    index: number;
+  type: constants.REMOVE_TASK;
+  day: constants.DAYS;
+  week: types.PrevCurNextKey;
+  index: number;
 }
-
-export interface AddTaskOnDay {
-    type: constants.ADD_TASK;
-    task: types.Task;
-    day: constants.DAYS;
-    week: types.PrevCurNextKey;
-}
-
-export interface RemoveTaskOnDay {
-    type: constants.REMOVE_TASK;
-    index: number;
-    day: constants.DAYS;
-    week: types.PrevCurNextKey;
-}
-
 // TODO: add interface ModifyTask
 
 
@@ -46,30 +35,48 @@ export interface RemoveTaskOnDay {
 * action to activate which week should be displayed on a DayCard
 */
 export interface ActivateWeekOnDay {
-    type: constants.ACTIVATE_WEEK_ON_DAY;
-    day: constants.DAYS;
-    activeWeek: types.PrevCurNextKey
+  type: constants.ACTIVATE_WEEK_ON_DAY;
+  day: constants.DAYS;
+  activeWeek: types.PrevCurNextKey
 }
+
+/*
+* actions for fetching news
+*/
+export interface FetchTasks {
+  type: constants.FETCH_TASKS;
+  grain: constants.TASK_GRAIN;
+  startTime: Date; // if week grain, the week for starting at that day
+}
+
+export interface ReceiveTasks {
+  type: constants.RECEIVE_TASKS;
+  day: constants.DAYS;
+  week: types.PrevCurNextKey;
+  taskList: types.Task[];
+}
+
+// TODO: invalidate task lists?
 
 /*
 * over-all actions in the app
 */
 export type ToggleAction = ActivateDay | Deactivate;
-// export type TaskAction = AddTask | RemoveTask;
-export type TaskAction = AddTaskOnDay | RemoveTaskOnDay;
+export type TaskAction = AddTask | RemoveTask | FetchTasks | ReceiveTasks;
 export type AppAction = ToggleAction | TaskAction | ActivateWeekOnDay;
 
+
 export function activate(day: constants.DAYS): ActivateDay {
-    return {
-        type: constants.ACTIVATE_DAY, // assign the value of type
-        day
-    }
+  return {
+    type: constants.ACTIVATE_DAY, // assign the value of type
+    day
+  }
 }
 
 export function deactivate(): Deactivate {
-    return {
-        type: constants.DEACTIVATE
-    }
+  return {
+    type: constants.DEACTIVATE
+  }
 }
 
 /* 
@@ -77,31 +84,55 @@ export function deactivate(): Deactivate {
 * no need to define addTask(task)
 */
 // TODO: should be addTaskOnDate?
-export function addTaskOnDay(task: types.Task, day: constants.DAYS, 
-        week: types.PrevCurNextKey): AddTaskOnDay {
-    return {
-        type: constants.ADD_TASK,
-        task,
-        day,
-        week
-    }
+export function addTask(task: types.Task, day: constants.DAYS,
+  week: types.PrevCurNextKey): AddTask {
+  return {
+    type: constants.ADD_TASK,
+    day,
+    week,
+    task
+  }
 }
 
-export function removeTaskOnDay(index: number, day: constants.DAYS,
-        week: types.PrevCurNextKey): RemoveTaskOnDay {
-    return {
-        type: constants.REMOVE_TASK,
-        index,
-        day,
-        week
-    }
+export function removeTask(index: number,
+  day: constants.DAYS,
+  week: types.PrevCurNextKey
+): RemoveTask {
+  return {
+    type: constants.REMOVE_TASK,
+    day,
+    week,
+    index
+  }
 }
 
-export function setActiveWeekOnDay(day: constants.DAYS, 
-        weekToActivate: types.PrevCurNextKey): ActivateWeekOnDay {
-            return {
-        type: constants.ACTIVATE_WEEK_ON_DAY,
-        day,
-        activeWeek: weekToActivate
-    }
+export function setActiveWeekOnDay(day: constants.DAYS,
+  weekToActivate: types.PrevCurNextKey
+): ActivateWeekOnDay {
+  return {
+    type: constants.ACTIVATE_WEEK_ON_DAY,
+    day,
+    activeWeek: weekToActivate
+  }
+}
+
+export function fetchTasks(grain: constants.TASK_GRAIN, 
+  startTime: Date
+): FetchTasks {
+  return {
+    type: constants.FETCH_TASKS,
+    grain,
+    startTime
+  }
+}
+
+export function receiveTasks(day: constants.DAYS,
+week: types.PrevCurNextKey,
+taskList: types.Task[]): ReceiveTasks {
+  return {
+    type: constants.RECEIVE_TASKS,
+    day,
+    week,
+    taskList
+  }
 }

@@ -28,12 +28,14 @@ function TaskList({ taskList, addTask, week, day, deleteTask }: Props) {
 
   // dynamically generated, TODO: performance issue
   const TaskInputForm = TaskInputFormWithId(day + '-' + week, false);
-  
+
   const isTaskFull = taskList.length === 5;
+
+  // TODO: fetch data from server
 
   return (
     <div>
-      { !isTaskFull && <TaskInputForm onSubmit={submit} />}
+      {!isTaskFull && <TaskInputForm onSubmit={submit} />}
       {
         taskList.map((item, index) => {
           const handleDelete = () => deleteTask!(index);

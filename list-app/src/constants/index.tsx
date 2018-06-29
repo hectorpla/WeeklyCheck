@@ -11,6 +11,13 @@ export const WEEK_DAYS = {
 export const WEEK_DAY_ARRAY: DAYS[] = 
     ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+export enum TASK_GRAIN {
+    WEEK,
+    DAY
+}
+
+export const REFRESH_TIME = 'REFRESH_TIME';
+export type REFRESH_TIME = typeof REFRESH_TIME;
 
 export const ACTIVATE_DAY = 'ACTIVATE_DAY';
 export type ACTIVATE_DAY = typeof ACTIVATE_DAY;
@@ -29,3 +36,12 @@ export type MODIFY_TASK = typeof MODIFY_TASK;
 
 export const ACTIVATE_WEEK_ON_DAY = 'ACTIVATE_WEEK';
 export type ACTIVATE_WEEK_ON_DAY = typeof ACTIVATE_WEEK_ON_DAY;
+
+export const FETCH_TASKS = 'FETCH_TASKS';
+export type FETCH_TASKS = typeof FETCH_TASKS;
+
+export const RECEIVE_TASKS = 'RECEIVE_TASKS';
+export type RECEIVE_TASKS = typeof RECEIVE_TASKS;
+
+export const UPLOAD_CHANGE = 'UPLOAD_CHANGE';
+export type UPLOAD_CHANGE = 'UPLOAD_CHANGE';
