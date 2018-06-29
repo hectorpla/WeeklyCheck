@@ -8,7 +8,6 @@ import TaskItem from '../TaskItem/TaskItem';
 const debug = Debug('component:TaskList');
 
 // think again: too much information for a list?
-// should the callbacks be optional?
 export interface Props {
   day: DAYS;
   week: PrevCurNextKey;
@@ -17,32 +16,32 @@ export interface Props {
   addTask?: (task: Task) => void;
 }
 
-// TODO: add insert/remove feature
-function TaskList({ taskList = [], addTask, week, day }: Props) {
+function TaskList({ taskList, addTask, week, day, deleteTask }: Props) {
   // first do integration without type
   const submit = (values: any) => {
     debug(`form values: ${values}`);
-    if (!addTask) {
-      throw Error("component TaskList: addTask method should exist");
-      return;
-    }
-    addTask({
+    // enhanced by the container, safe to unwrap
+    addTask!({
       code: values.code
     });
   }
 
-  // dynamically generated
+  // dynamically generated, TODO: performance issue
   const TaskInputForm = TaskInputFormWithId(day + '-' + week, false);
   
   const isTaskFull = taskList.length === 5;
-  
+
   return (
     <div>
       { !isTaskFull && <TaskInputForm onSubmit={submit} />}
       {
-        taskList.map((item, index) =>
-          <TaskItem key={index} item={item} />
-        )
+        taskList.map((item, index) => {
+          const handleDelete = () => deleteTask!(index);
+          return (
+            <TaskItem key={index} item={item}
+              onDelete={handleDelete} />
+          )
+        })
       }
     </div>
   );

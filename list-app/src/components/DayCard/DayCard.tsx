@@ -24,17 +24,17 @@ const colorsForWeek: ColorForWeek = {
 }
 
 /*
-* temporarily designed to be a pure component only display
-* the day and dates of a card
+! temporarily designed to be a PURE component only display
+! the day and dates of a card
 */
 function DayCard({ day, currentTime, isActive, activeWeek }: Props) {
   const color = colorsForWeek[activeWeek];
-  
+
   return (
     <div className={"row card-panel " + color}>
-      <div className=""> {day}, {calculateRelativeDate(day, currentTime).toDateString()} </div>
+      <div className=""> {calculateRelativeDate(day, currentTime).toDateString()} </div>
       {
-        isActive && 
+        isActive &&
         <TaskListSwitchBoard day={day} />
       }
     </div>

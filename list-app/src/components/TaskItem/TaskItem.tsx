@@ -5,15 +5,18 @@ export interface Props {
     item: Task;
     // isChangable: boolean;
     // onItemChange: (item: Task) => void;
+    onDelete: () => void
 }
 
-function TaskItem({item}: Props) {
+function TaskItem({item, onDelete}: Props) {
+    const handleDelete = () => onDelete();
     return (
         <div> 
             <span> {item.code} </span>
             :
             <span> {item.subscription} </span>
             {/* tags */}
+            <span className="right" onClick={handleDelete}> delete </span>
         </div>
     );
 }

@@ -5,6 +5,7 @@ export interface Props {
     handleSubmit: any // temporarily
 }
 
+// TODO add form validation
 function TaskInputForm({handleSubmit}: Props) {
     return (
         <form onSubmit={handleSubmit}>

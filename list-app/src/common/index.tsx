@@ -18,6 +18,12 @@ export function calculateRelativeDate(day: DAYS, ref: Date): Date {
     return calculatedTime;
 }
 
+export function calculateOffsetDate(date: Date, offset: PrevCurNextKey) {
+    if (offset === 'cur') { return date; }
+    if (offset === 'prev') { return addDays(date, -7); }
+    return addDays(date, 7);
+}
+
 /*
 * given the reference time and a day, decide the whether the day is
 * current week or next week

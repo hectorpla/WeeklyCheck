@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { calculateRelativeDate, toMonthDateString } from '../../common';
+import { calculateOffsetDate, calculateRelativeDate, toMonthDateString } from '../../common';
 import { DAYS } from '../../constants';
 import TaskList from '../../containers/TaskList';
 import { PrevCurNextKey, PrevCurNextTaskLists } from '../../types';
@@ -37,8 +37,9 @@ const weekBearing: WeekBearing = {
   }
 };
 
-// TODO: add slide feature to switch prev/cur/next week
-// activeWeek should never be undefined
+/*
+* The component that controls the active week card for a day
+*/
 function TaskListSwitchBoard({ day, activeWeek = 'cur', taskListOfWeeks,
   currentTime, onWeekChange }: Props) {
   if (!taskListOfWeeks) {
@@ -46,16 +47,19 @@ function TaskListSwitchBoard({ day, activeWeek = 'cur', taskListOfWeeks,
   }
 
   const dayTaskList = taskListOfWeeks[activeWeek];
-  // TODO: rethink, prevent propogation on the level
-
   // TODO: add one more layer to handle unfocused views
 
-  const dateString = toMonthDateString(calculateRelativeDate(day, currentTime!));
+  // TODO: too much logic here, split out
+  const relatedCurDate = calculateRelativeDate(day, currentTime!);
+  const relatedCardDate = calculateOffsetDate(relatedCurDate, activeWeek);
+  const dateString = toMonthDateString(relatedCardDate);
+
   const leftCard = weekBearing[activeWeek].left;
   const rightCard = weekBearing[activeWeek].right;
   const handleWeekSlideLeft = () => onWeekChange!(leftCard!);
   const handleWeekSlideRight = () => onWeekChange!(rightCard!);
   return (
+    // TODO: rethink, prevent propogation on the level
     <div onClick={seizeClickBubbling}>
       <div className="right"> {dateString} </div>
       <div>
