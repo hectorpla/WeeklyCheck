@@ -9,28 +9,40 @@ export interface Task {
     tags?: string[];
 }
 
-// type TaskListIndex = 1 | 2 | 3 | 4 | 5;
+export interface FetchableItemStatus {
+    fetched: boolean; // set to true once fetched
+    isFetching: boolean;
+    didInvalidate: boolean;
+    isFetchFailed: boolean;
+}
 
 // should do restriction of its length, check in runtime?
-export type DailyTaskList = Task[];
+export interface DailyTasks {
+    list: Task[];
+    status: FetchableItemStatus;
+} 
 
 /*  
 * For previous/next week
+? the most profound assumption in the app ?
 */
 export interface PrevCurNextTaskLists {
-    prev?: DailyTaskList;
-    cur: DailyTaskList;
-    next?: DailyTaskList;
-}
+    prev: DailyTasks;
+    cur: DailyTasks; // might be optional
+    next: DailyTasks;
+} // ! two types coupled, consider deliberately to change the interface
 export type PrevCurNextKey = keyof PrevCurNextTaskLists;
 
-// to store the whole message of the task lists
-// actually strictly two weeks for per day in runtime
+/* sub-store to store the whole message of the task lists
+* actually strictly two weeks for per day in runtime
+*/
 export type TasksOfRecentWeeks = {
     [day in DAYS]: PrevCurNextTaskLists;
 }
 
-// sub-store: active week for a DayCard
+/* 
+* sub-store: active week for a DayCard
+*/
 export type ActiveWeekOnDays = {
     [day in DAYS]: PrevCurNextKey;
 }
@@ -40,14 +52,16 @@ export type ActiveWeekOnDays = {
 */
 export interface DayToggleState {
     activeDay: DAYS | void;
-    currentTime: Date; // put here?
+    currentTime: Date; // TODO: extract the time info into another slice
 }
 
 /*
 * the overall states of the app
+* both activeWeekSlice activeDaySlice are for UI purpose
+* allTaskListSlice for business logic (contract with server)
 */
 export interface AppState {
-    activeDaySlice: DayToggleState,
-    activeWeekSlice: ActiveWeekOnDays,
-    allTaskListSlice: TasksOfRecentWeeks
+    activeDaySlice: DayToggleState;
+    activeWeekSlice: ActiveWeekOnDays;
+    allTaskListSlice: TasksOfRecentWeeks;
 }

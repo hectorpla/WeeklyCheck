@@ -1,7 +1,7 @@
 import * as Debug from 'debug';
-import { TaskListOpAction } from "../actions";
-import { ADD_TASK, REMOVE_TASK } from "../constants";
-import { DailyTaskList, PrevCurNextTaskLists, Task, TasksOfRecentWeeks } from "../types";
+import { TaskAction, TaskListOpAction, TaskLoadAction } from "../actions";
+import { ADD_TASK, FETCH_TASKS, INVALIDATE_TASKS, RECEIVE_TASKS, REMOVE_TASK } from "../constants";
+import { DailyTasks, PrevCurNextTaskLists, Task, TasksOfRecentWeeks } from "../types";
 
 // TODO: enable debug in browser, in console: localStorage.debug = 'worker:*' 
 const debugNamespace = 'reducer:task';
@@ -9,15 +9,30 @@ const debug = Debug(debugNamespace);
 
 // the interface and the function should be coupled
 export type TaskReducer =
-  (state: DailyTaskList, action: TaskListOpAction) => DailyTaskList;
+  (state: DailyTasks, action: TaskListOpAction) => DailyTasks;
 
-function createInitThreeWeekTasks(): PrevCurNextTaskLists {
+function createOneWeekTasks() {
   return {
-    cur: [] // consider the reason for it again
-  };
+    list: [],
+    status: {
+      fetched: false,
+      isFetching: false,
+      didInvalidate: false,
+      isFetchFailed: false
+    }
+  }
 }
 
-export function createInitAllWeekTasks() {
+function createInitThreeWeekTasks(): PrevCurNextTaskLists {
+  // consider the reason for allowing current again
+  return {
+    prev: createOneWeekTasks(),
+    cur: createOneWeekTasks(),
+    next: createOneWeekTasks()
+  }
+}
+
+export function createInitAllWeekTasks(): TasksOfRecentWeeks {
   return {
     Monday: createInitThreeWeekTasks(),
     Tuesday: createInitThreeWeekTasks(),
@@ -29,13 +44,13 @@ export function createInitAllWeekTasks() {
   };
 }
 
-export function taskReducer(
-  state: Task[] | void,
+function taskListOpReducer(
+  state: Task[],
   action: TaskListOpAction,
-): Task[] | void {
-  if (!state) {
-    return state;
-  }
+): Task[] {
+  // if (!state) {
+  //   return state;
+  // }
   switch (action.type) {
     case ADD_TASK:
       return [...state, action.task];
@@ -47,49 +62,92 @@ export function taskReducer(
   return state;
 }
 
+// TODO: reduce boilerplate using libs
+function taskDisplayReducer(
+  state: DailyTasks, 
+  action: TaskLoadAction
+): DailyTasks {
+  const { list, status } = state;
+  switch(action.type) {
+    case INVALIDATE_TASKS:
+      return {
+        list,
+        status: {
+          ...status,
+          didInvalidate: true
+        }
+      }
+    case FETCH_TASKS:
+      return {
+        list,
+        status: {
+          ...status,
+          isFetching: true,
+          didInvalidate: false
+        }
+      }
+    case RECEIVE_TASKS:
+      return {
+        list,
+        status: {
+          ...status,
+          isFetching: false,
+        }
+      }
+    default: return state;
+  }
+}
+
 // TODO: write test
 export function taskMultiplexReducer(
   state: TasksOfRecentWeeks = createInitAllWeekTasks(),
-  action: TaskListOpAction,
+  action: TaskAction,
 ): TasksOfRecentWeeks {
   debug(`state ${JSON.stringify(state)}, action: ${JSON.stringify(action)}`);
   if (!state || !action.day) { // TODO: for test
     return state;
   }
 
-  function getTaskList() {
+  function getTasks(): DailyTasks {
     const { day, week } = action;
-    const list = state[day][week];
-    debug(`${day}, ${week}, ${list}`);
-    return list;
+    const tasks = state[day][week];
+    debug(`${day}, ${week}, ${tasks}`);
+    return tasks;
   }
 
-  function replaceList(newState: TasksOfRecentWeeks, list: Task[] | void) {
+  function replaceTasks(newState: TasksOfRecentWeeks, 
+    tasks: DailyTasks
+  ): TasksOfRecentWeeks {
     // expect newState !== state
     const { day, week } = action;
     return {
       ...newState,
       [action.day]: {
         ...newState[day],
-        [week]: list
+        [week]: tasks
       }
     }
   }
 
+  const tasksInState: DailyTasks = getTasks();
   switch (action.type) {
     case ADD_TASK:
     case REMOVE_TASK:
-      const listInState = getTaskList();
-      if (!listInState) {
-        return state;
-      }
-      return replaceList(
+      return replaceTasks(
         { ...state },
-        taskReducer(listInState, action)
+        {
+          list: taskListOpReducer(tasksInState.list, action),
+          status: tasksInState.status
+        }
+      );
+    case INVALIDATE_TASKS:
+    case FETCH_TASKS:
+    case RECEIVE_TASKS:
+      return replaceTasks({...state},
+        taskDisplayReducer({...tasksInState}, action)
       );
     default:
       return state;
   }
 }
 
-// TODO task display reducer

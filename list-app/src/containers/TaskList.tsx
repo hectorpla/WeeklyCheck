@@ -4,34 +4,23 @@ import TaskList, { Props } from '../components/TaskList/TaskList';
 import { AppState, Task } from '../types';
 
 function mapStateToProps(state: AppState, ownProps: Props) {
-  // const { activeDaySlice, activeWeekSlice, allTaskListSlice } = state;
-  // const activeDay = activeDaySlice.activeDay;
-  // if (activeDay !== ownProps.day) return state;
-
-  // const activeWeek = activeWeekSlice[activeDay];
   const allTaskLists = state.allTaskListSlice;
-  const { day, week } = ownProps;
-  const list = allTaskLists[day][week];
-  if (!list) {
-    throw Error("container TaskList: list should not be undefined");
-  }
+  const { day, week, editable } = ownProps;
+  const tasks = allTaskLists[day][week];
   return {
     day,
     week,
-    taskList: list
+    tasks,
+    editable
   }
 }
 
-// TODO: why other props are needed here, not needed in SwitchBoard
 export function mapDispatchToProps(dispatch: Dispatch<actions.TaskAction>,
   ownProps: Props) {
-  const { day, week, taskList } = ownProps;
+  const { day, week } = ownProps;
   return {
-    day,
-    week,
-    taskList,
-    deleteTask: (index: number) => dispatch(actions.removeTaskOnDay(index, day, week)),
-    addTask: (task: Task) => dispatch(actions.addTaskOnDay(task, day, week))
+    deleteTask: (index: number) => dispatch(actions.removeTask(index, day, week)),
+    addTask: (task: Task) => dispatch(actions.addTask(task, day, week))
   }
 }
 

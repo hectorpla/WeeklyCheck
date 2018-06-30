@@ -43,10 +43,16 @@ export interface ActivateWeekOnDay {
 /*
 * actions for fetching news
 */
-export interface FetchTasks {
-  type: constants.FETCH_TASKS;
+export interface FetchTasksBatch {
+  type: constants.FETCH_TASKS_BATCH;
   grain: constants.TASK_GRAIN;
   startTime: Date; // if week grain, the week for starting at that day
+}
+
+export interface FetchTasks {
+  type: constants.FETCH_TASKS;
+  day: constants.DAYS;
+  week: types.PrevCurNextKey;
 }
 
 export interface ReceiveTasks {
@@ -56,13 +62,21 @@ export interface ReceiveTasks {
   taskList: types.Task[];
 }
 
-// TODO: invalidate task lists?
+export interface InvalidateTasks {
+  type: constants.INVALIDATE_TASKS;
+  day: constants.DAYS;
+  week: types.PrevCurNextKey;
+}
 
 /*
 * over-all actions in the app
 */
 export type ToggleAction = ActivateDay | Deactivate;
-export type TaskAction = AddTask | RemoveTask | FetchTasks | ReceiveTasks;
+
+export type TaskListOpAction = AddTask | RemoveTask;
+export type TaskLoadAction = InvalidateTasks | FetchTasks | ReceiveTasks;
+export type TaskAction = TaskListOpAction | TaskLoadAction;
+
 export type AppAction = ToggleAction | TaskAction | ActivateWeekOnDay;
 
 
@@ -116,13 +130,34 @@ export function setActiveWeekOnDay(day: constants.DAYS,
   }
 }
 
-export function fetchTasks(grain: constants.TASK_GRAIN, 
+export function invalidateTasks(day: constants.DAYS,
+week: types.PrevCurNextKey): InvalidateTasks {
+  return {
+    type: constants.INVALIDATE_TASKS,
+    day,
+    week
+  }
+}
+
+export function fetchTasksBatch(grain: constants.TASK_GRAIN, 
   startTime: Date
+): FetchTasksBatch {
+  // TODO async calls
+
+  return {
+    type: constants.FETCH_TASKS_BATCH,
+    grain,
+    startTime
+  }
+}
+
+export function fetchTasks(day: constants.DAYS,
+  week: types.PrevCurNextKey
 ): FetchTasks {
   return {
     type: constants.FETCH_TASKS,
-    grain,
-    startTime
+    day,
+    week
   }
 }
 

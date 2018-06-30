@@ -2,7 +2,7 @@ import * as Debug from 'debug';
 import * as React from 'react';
 import { DAYS } from '../../constants';
 import { TaskInputFormWithId } from '../../forms/TaskInputForm';
-import { PrevCurNextKey, Task } from '../../types';
+import { DailyTasks, PrevCurNextKey, Task } from '../../types';
 import TaskItem from '../TaskItem/TaskItem';
 
 const debug = Debug('component:TaskList');
@@ -11,12 +11,13 @@ const debug = Debug('component:TaskList');
 export interface Props {
   day: DAYS;
   week: PrevCurNextKey;
-  taskList: Task[];
+  tasks: DailyTasks;
+  editable: boolean;
   deleteTask?: (index: number) => void;
   addTask?: (task: Task) => void;
 }
 
-function TaskList({ taskList, addTask, week, day, deleteTask }: Props) {
+function TaskList({ week, day, tasks, editable, addTask, deleteTask }: Props) {
   // first do integration without type
   const submit = (values: any) => {
     debug(`form values: ${values}`);
@@ -24,20 +25,23 @@ function TaskList({ taskList, addTask, week, day, deleteTask }: Props) {
     addTask!({
       code: values.code
     });
+    // TODO: invalidate tasks
   }
 
   // dynamically generated, TODO: performance issue
   const TaskInputForm = TaskInputFormWithId(day + '-' + week, false);
-
-  const isTaskFull = taskList.length === 5;
+  
+  const tasklist = tasks.list;
+  const isTaskFull = tasklist.length === 5;
 
   // TODO: fetch data from server
-
+  
   return (
     <div>
-      {!isTaskFull && <TaskInputForm onSubmit={submit} />}
+      { !tasks.status.didInvalidate }
+      { editable && !isTaskFull && <TaskInputForm onSubmit={submit} />}
       {
-        taskList.map((item, index) => {
+        tasklist.map((item, index) => {
           const handleDelete = () => deleteTask!(index);
           return (
             <TaskItem key={index} item={item}

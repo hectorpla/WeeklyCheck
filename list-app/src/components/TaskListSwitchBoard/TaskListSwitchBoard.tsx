@@ -46,7 +46,7 @@ function TaskListSwitchBoard({ day, activeWeek = 'cur', taskListOfWeeks,
     throw new Error("TaskListSwitchBoard: three lists of tasks not existing");
   }
 
-  const dayTaskList = taskListOfWeeks[activeWeek];
+  const dayTasks = taskListOfWeeks[activeWeek];
   // TODO: add one more layer to handle unfocused views
 
   // TODO: too much logic here, split out
@@ -70,13 +70,8 @@ function TaskListSwitchBoard({ day, activeWeek = 'cur', taskListOfWeeks,
           <i className="material-icons">keyboard_arrow_right</i>
         </button>
       </div>
-      {
-        !!dayTaskList ?
-          <TaskList day={day} week={activeWeek}
-            taskList={dayTaskList} />
-          :
-          <span> No data, shouldn't display </span>
-      }
+      <TaskList day={day} week={activeWeek}
+        tasks={dayTasks} editable={relatedCardDate >= currentTime!} />
     </div>
   );
 }
