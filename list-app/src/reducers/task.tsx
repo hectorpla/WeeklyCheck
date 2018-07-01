@@ -82,13 +82,14 @@ function taskDisplayReducer(
         list,
         status: {
           ...status,
+          fetched: true,
           isFetching: true,
           didInvalidate: false
         }
       }
     case RECEIVE_TASKS:
       return {
-        list,
+        list: action.taskList,
         status: {
           ...status,
           isFetching: false,

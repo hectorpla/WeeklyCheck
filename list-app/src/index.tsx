@@ -6,21 +6,31 @@ import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import logger from 'redux-logger';
+import thunk, { ThunkDispatch } from 'redux-thunk';
 import { AppAction } from './actions';
+import { fetchTasksBatch } from './actions/async';
+import { getDay } from './common';
+import { TASK_GRAIN } from './constants';
 import CardList from './containers/CardList';
 import rootReducer from './reducers/index';
 import { AppState } from './types/index';
 
-// fixed the generics
-// too much boilerplate
-const store = createStore<AppState, AppAction, any, any>(rootReducer, {
-  // activeDaySlice: {
-  //   activeDay: 'Thursday',
-  //   currentTime: new Date()
-  // },
-},
-  applyMiddleware(logger)
+const currentTime = new Date();
+
+// wraping for the store creating function
+const myCreateStore = applyMiddleware(thunk, logger)(createStore);
+
+const store = myCreateStore<AppState, AppAction>(
+  rootReducer, 
+  {
+    activeDaySlice: {
+      activeDay: getDay(currentTime),
+      currentTime
+    }
+  },
 );
+
+// TODO prefetch data?
 
 ReactDOM.render(
   <Provider store={store}>
@@ -28,4 +38,10 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root') as HTMLElement
 );
+
+(store.dispatch as ThunkDispatch<AppState, void, AppAction>)(fetchTasksBatch(
+  TASK_GRAIN.DAY,
+  currentTime
+));
+
 registerServiceWorker();

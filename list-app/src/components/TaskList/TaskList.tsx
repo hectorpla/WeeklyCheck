@@ -38,6 +38,7 @@ function TaskList({ week, day, tasks, editable, addTask, deleteTask }: Props) {
   
   return (
     <div>
+      <pre> {JSON.stringify(tasks.status)} </pre>
       { !tasks.status.didInvalidate }
       { editable && !isTaskFull && <TaskInputForm onSubmit={submit} />}
       {

@@ -40,15 +40,6 @@ export interface ActivateWeekOnDay {
   activeWeek: types.PrevCurNextKey
 }
 
-/*
-* actions for fetching news
-*/
-export interface FetchTasksBatch {
-  type: constants.FETCH_TASKS_BATCH;
-  grain: constants.TASK_GRAIN;
-  startTime: Date; // if week grain, the week for starting at that day
-}
-
 export interface FetchTasks {
   type: constants.FETCH_TASKS;
   day: constants.DAYS;
@@ -136,18 +127,6 @@ week: types.PrevCurNextKey): InvalidateTasks {
     type: constants.INVALIDATE_TASKS,
     day,
     week
-  }
-}
-
-export function fetchTasksBatch(grain: constants.TASK_GRAIN, 
-  startTime: Date
-): FetchTasksBatch {
-  // TODO async calls
-
-  return {
-    type: constants.FETCH_TASKS_BATCH,
-    grain,
-    startTime
   }
 }
 

@@ -1,4 +1,4 @@
-import { DAYS, WEEK_DAYS } from "../constants";
+import { DAYS, WEEK_DAY_ARRAY, WEEK_DAYS } from "../constants";
 import { PrevCurNextKey } from "../types";
 
 export function addDays(date: Date, dayDelta: number): Date {
@@ -38,4 +38,8 @@ export function getEditableWeek(day: DAYS, ref: Date): PrevCurNextKey {
 
 export function toMonthDateString(date: Date) {
     return `${date.getMonth()}-${date.getDate()}`;
+}
+
+export function getDay(date: Date) {
+    return WEEK_DAY_ARRAY[date.getDay()];
 }

@@ -1,11 +1,13 @@
 import { ToggleAction } from '../actions/index';
-import { ACTIVATE_DAY, DEACTIVATE, WEEK_DAY_ARRAY } from '../constants/index';
+import { getDay } from '../common';
+import { ACTIVATE_DAY, DEACTIVATE } from '../constants/index';
 import { DayToggleState } from '../types/index';
 
 function createInitState() {
+    const currentTime = new Date();
     return {
-        activeDay: WEEK_DAY_ARRAY[new Date().getDay()],
-        currentTime: new Date()
+        activeDay: getDay(currentTime),
+        currentTime
     }
 }
 
