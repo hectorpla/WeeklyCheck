@@ -14,7 +14,7 @@ function TaskItem({item, onDelete}: Props) {
         <div> 
             <span> {item.code} </span>
             :
-            <span> {item.subscription} </span>
+            <span> {item.description} </span>
             {/* tags */}
             <span className="right" onClick={handleDelete}> delete </span>
         </div>

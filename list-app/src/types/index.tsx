@@ -5,7 +5,7 @@ import { DAYS } from '../constants/index';
 */
 export interface Task {
     code: number;
-    subscription?: string;
+    description?: string;
     tags?: string[];
 }
 
@@ -33,7 +33,9 @@ export interface PrevCurNextTaskLists {
 } // ! two types coupled, consider deliberately to change the interface
 export type PrevCurNextKey = keyof PrevCurNextTaskLists;
 
-/* sub-store to store the whole message of the task lists
+/* 
+! root for the tasks memory
+* sub-store to store the whole message of the task lists
 * actually strictly two weeks for per day in runtime
 */
 export type TasksOfRecentWeeks = {

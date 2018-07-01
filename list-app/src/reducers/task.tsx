@@ -82,7 +82,6 @@ function taskDisplayReducer(
         list,
         status: {
           ...status,
-          fetched: true,
           isFetching: true,
           didInvalidate: false
         }
@@ -92,6 +91,7 @@ function taskDisplayReducer(
         list: action.taskList,
         status: {
           ...status,
+          fetched: true,
           isFetching: false,
         }
       }

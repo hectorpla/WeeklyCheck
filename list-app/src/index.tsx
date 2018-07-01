@@ -40,7 +40,7 @@ ReactDOM.render(
 );
 
 (store.dispatch as ThunkDispatch<AppState, void, AppAction>)(fetchTasksBatch(
-  TASK_GRAIN.DAY,
+  TASK_GRAIN.WEEK,
   currentTime
 ));
 

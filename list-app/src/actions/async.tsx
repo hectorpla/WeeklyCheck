@@ -1,16 +1,9 @@
 import { Dispatch } from 'react-redux';
 import { fetchTasks, receiveTasks, TaskLoadAction } from '.';
+import { WeekTasks } from '../apis';
 import { getDay } from '../common';
-import * as constants from '../constants'
-
-/*
-* actions for fetching news
-*/
-export interface FetchTasksBatch {
-  type: constants.FETCH_TASKS_BATCH;
-  grain: constants.TASK_GRAIN;
-  startTime: Date; // if week grain, the week for starting at that day
-}
+import * as constants from '../constants';
+import { fakeFetchWeekTasks } from '../mock/mockFetch';
 
 export function fetchTasksBatch(
   grain: constants.TASK_GRAIN,
@@ -23,11 +16,12 @@ export function fetchTasksBatch(
       const day = getDay(new Date());
       dispatch(fetchTasks(day, 'cur'));
 
-      return new Promise<void>((resolve) => {
-        setTimeout(() => {
-          dispatch(receiveTasks(day, 'cur', [{code: 333}]));
-          resolve();
-        }, 1000);
-      });
+      return fakeFetchWeekTasks(constants.TASK_GRAIN.DAY, startTime)
+              .then((weekTasks: WeekTasks) => {
+                for (const key of constants.WEEK_DAY_ARRAY) {
+                  const list = weekTasks[key];
+                  dispatch(receiveTasks(key, 'cur', list));
+                }
+              });
   }
 }
