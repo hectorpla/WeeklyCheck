@@ -4,6 +4,7 @@ import TaskList, { Props } from '../components/TaskList/TaskList';
 import { AppState, Task } from '../types';
 
 function mapStateToProps(state: AppState, ownProps: Props) {
+  const { activeDay } = state.activeDaySlice;
   const allTaskLists = state.allTaskListSlice;
   const { day, week, editable } = ownProps;
   const tasks = allTaskLists[day][week];
@@ -11,7 +12,8 @@ function mapStateToProps(state: AppState, ownProps: Props) {
     day,
     week,
     tasks,
-    editable
+    editable,
+    isActive: activeDay === day
   }
 }
 

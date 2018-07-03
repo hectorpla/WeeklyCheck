@@ -33,9 +33,7 @@ function CardList({ snapshotTime, activeDay, activeWeeks,
         return (
           <div className="hoverable" key={day} onClick={handleClick}>
             <DayCard currentTime={snapshotTime} day={day}
-              isActive={!!activeDay && day === activeDay}
-              activeWeek={activeWeeks[day]}
-            />
+              activeWeek={activeWeeks[day]} />
           </div>
         )
       })}

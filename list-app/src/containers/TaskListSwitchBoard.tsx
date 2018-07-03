@@ -6,6 +6,7 @@ import { AppState, PrevCurNextKey } from '../types';
 export function mapStateToProps(state: AppState, ownProps: Props) {
     const { activeDaySlice, activeWeekSlice, allTaskListSlice } = state;
     const { day } = ownProps;
+    const { currentTime, activeDay } = activeDaySlice;
     const taskListOfWeeks = allTaskListSlice[day];
     const activeWeek = activeWeekSlice[day];
     
@@ -13,7 +14,8 @@ export function mapStateToProps(state: AppState, ownProps: Props) {
         day,
         activeWeek,
         taskListOfWeeks,
-        currentTime: activeDaySlice.currentTime
+        currentTime,
+        isCardActive: activeDay === day
     }
 }
 

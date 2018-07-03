@@ -2,14 +2,14 @@ import * as React from 'react';
 import { calculateOffsetDate, calculateRelativeDate, toMonthDateString } from '../../common';
 import { DAYS } from '../../constants';
 import TaskList from '../../containers/TaskList';
-import { PrevCurNextKey, PrevCurNextTaskLists } from '../../types';
+import { PrevCurNextKey } from '../../types';
 
 // only day is passed from the parent 
 export interface Props {
   day: DAYS;
   currentTime?: Date,
   activeWeek?: PrevCurNextKey;
-  taskListOfWeeks?: PrevCurNextTaskLists;
+  isCardActive?: boolean;
   onWeekChange?: (weekToActivate: PrevCurNextKey) => void;
 }
 
@@ -40,14 +40,8 @@ const weekBearing: WeekBearing = {
 /*
 * The component that controls the active week card for a day
 */
-function TaskListSwitchBoard({ day, activeWeek = 'cur', taskListOfWeeks,
-  currentTime, onWeekChange }: Props) {
-  if (!taskListOfWeeks) {
-    throw new Error("TaskListSwitchBoard: three lists of tasks not existing");
-  }
-
-  const dayTasks = taskListOfWeeks[activeWeek];
-  // TODO: add one more layer to handle unfocused views
+function TaskListSwitchBoard({ day, activeWeek = 'cur',
+  isCardActive, currentTime, onWeekChange }: Props) {
 
   // TODO: too much logic here, split out
   const relatedCurDate = calculateRelativeDate(day, currentTime!);
@@ -62,16 +56,17 @@ function TaskListSwitchBoard({ day, activeWeek = 'cur', taskListOfWeeks,
     // TODO: rethink, prevent propogation on the level
     <div onClick={seizeClickBubbling}>
       <div className="right"> {dateString} </div>
-      <div>
-        <button disabled={!leftCard} onClick={handleWeekSlideLeft}>
-          <i className="material-icons">keyboard_arrow_left</i>
-        </button>
-        <button disabled={!rightCard} onClick={handleWeekSlideRight}>
-          <i className="material-icons">keyboard_arrow_right</i>
-        </button>
-      </div>
+      { isCardActive &&
+        <div>
+          <button disabled={!leftCard} onClick={handleWeekSlideLeft}>
+            <i className="material-icons">keyboard_arrow_left</i>
+          </button>
+          <button disabled={!rightCard} onClick={handleWeekSlideRight}>
+            <i className="material-icons">keyboard_arrow_right</i>
+          </button>
+        </div>}
       <TaskList day={day} week={activeWeek}
-        tasks={dayTasks} editable={relatedCardDate >= currentTime!} />
+        editable={relatedCardDate >= currentTime!} />
     </div>
   );
 }

@@ -9,7 +9,6 @@ import { PrevCurNextKey, PrevCurNextTaskLists } from '../../types';
 export interface Props {
   currentTime: Date;
   day: DAYS;
-  isActive: boolean;
   activeWeek: PrevCurNextKey;
 }
 
@@ -27,16 +26,13 @@ const colorsForWeek: ColorForWeek = {
 ! temporarily designed to be a PURE component only display
 ! the day and dates of a card
 */
-function DayCard({ day, currentTime, isActive, activeWeek }: Props) {
+function DayCard({ day, currentTime, activeWeek }: Props) {
   const color = colorsForWeek[activeWeek];
 
   return (
     <div className={"row card-panel " + color}>
       <div className=""> {calculateRelativeDate(day, currentTime).toDateString()} </div>
-      {
-        isActive &&
-        <TaskListSwitchBoard day={day} />
-      }
+      <TaskListSwitchBoard day={day} />
     </div>
 
   );
