@@ -59,6 +59,17 @@ export interface InvalidateTasks {
   week: types.PrevCurNextKey;
 }
 
+export interface ChangeSearchText {
+  type: constants.SEARCH_TEXT_CHANGE;
+  text: string;
+}
+
+export interface FilterTasks {
+  type: constants.FILTER_TASKS;
+  day: constants.DAYS;
+  source: types.DailyTasks;
+}
+
 /*
 * over-all actions in the app
 */
@@ -67,8 +78,10 @@ export type ToggleAction = ActivateDay | Deactivate;
 export type TaskListOpAction = AddTask | RemoveTask;
 export type TaskLoadAction = InvalidateTasks | FetchTasks | ReceiveTasks;
 export type TaskAction = TaskListOpAction | TaskLoadAction;
+export type FilterAction = ChangeSearchText | FilterTasks;
 
-export type AppAction = ToggleAction | TaskAction | ActivateWeekOnDay;
+export type AppAction = ToggleAction | TaskAction | ActivateWeekOnDay |
+FilterAction;
 
 
 export function activate(day: constants.DAYS): ActivateDay {
@@ -122,7 +135,7 @@ export function setActiveWeekOnDay(day: constants.DAYS,
 }
 
 export function invalidateTasks(day: constants.DAYS,
-week: types.PrevCurNextKey): InvalidateTasks {
+  week: types.PrevCurNextKey): InvalidateTasks {
   return {
     type: constants.INVALIDATE_TASKS,
     day,
@@ -141,12 +154,29 @@ export function fetchTasks(day: constants.DAYS,
 }
 
 export function receiveTasks(day: constants.DAYS,
-week: types.PrevCurNextKey,
-taskList: types.Task[]): ReceiveTasks {
+  week: types.PrevCurNextKey,
+  taskList: types.Task[]): ReceiveTasks {
   return {
     type: constants.RECEIVE_TASKS,
     day,
     week,
     taskList
+  }
+}
+
+export function changeSearchText(text: string): ChangeSearchText {
+  return {
+    type: constants.SEARCH_TEXT_CHANGE,
+    text
+  }
+}
+
+// TODO: thunk 
+export function filterTasks(day: constants.DAYS): FilterTasks {
+  // function(dispatch, getState)
+
+  return {
+    type: constants.FILTER_TASKS,
+    day
   }
 }

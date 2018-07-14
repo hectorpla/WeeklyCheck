@@ -20,7 +20,7 @@ export interface FetchableItemStatus {
 export interface DailyTasks {
     list: Task[];
     status: FetchableItemStatus;
-} 
+}
 
 /*  
 * For previous/next week
@@ -33,11 +33,6 @@ export interface PrevCurNextTaskLists {
 } // ! two types coupled, consider deliberately to change the interface
 export type PrevCurNextKey = keyof PrevCurNextTaskLists;
 
-/* 
-! root for the tasks memory
-* sub-store to store the whole message of the task lists
-* actually strictly two weeks for per day in runtime
-*/
 export type TasksOfRecentWeeks = {
     [day in DAYS]: PrevCurNextTaskLists;
 }
@@ -57,6 +52,26 @@ export interface DayToggleState {
     currentTime: Date; // TODO: extract the time info into another slice
 }
 
+
+/*
+* sub-store containing the filtered reference of tasks for each
+* should be updated whenenver the filter changes or TODO: task source is changed
+*/
+export interface TaskFilterState {
+    // value: list of reference to tasks in current week
+    fileredLists: { [day in DAYS]: number[] };
+    filterKey: number;
+}
+
+/* 
+! root for the tasks memory
+* sub-store to store the whole message of the task lists
+*/
+export interface TaskState {
+    taskOfRecentWeek: TasksOfRecentWeeks;
+    taskFilterState: TaskFilterState;
+}
+
 /*
 * the overall states of the app
 * both activeWeekSlice activeDaySlice are for UI purpose
@@ -65,5 +80,5 @@ export interface DayToggleState {
 export interface AppState {
     activeDaySlice: DayToggleState;
     activeWeekSlice: ActiveWeekOnDays;
-    allTaskListSlice: TasksOfRecentWeeks;
+    allTaskListSlice: TaskState;
 }
