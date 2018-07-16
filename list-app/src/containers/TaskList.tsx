@@ -1,19 +1,27 @@
+import * as Debug from 'debug';
 import { connect, Dispatch } from 'react-redux';
 import * as actions from "../actions";
 import TaskList, { Props } from '../components/TaskList/TaskList';
 import { AppState, Task } from '../types';
 
-function mapStateToProps(state: AppState, ownProps: Props) {
+const debugNamespace = 'container:TaskList';
+const debug = Debug(debugNamespace);
+
+// TODO: refactor to reflect the filtered items
+function mapStateToProps(state: AppState, ownProps: Props): Props {
   const { activeDay } = state.activeDaySlice;
   const allTaskLists = state.allTaskListSlice;
-  const { day, week, editable } = ownProps;
+  const { fileredLists } = state.filterSlice;
+
+  const { day, week } = ownProps;
   const tasks = allTaskLists[day][week];
+  
+  debug(state);
   return {
-    day,
-    week,
+    ...ownProps,
     tasks,
-    editable,
-    isActive: activeDay === day
+    filteredTasks: fileredLists[day],
+    isCardActive: activeDay === day
   }
 }
 

@@ -1,5 +1,5 @@
 export type DAYS = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
-export const WEEK_DAYS = {
+export const WEEK_DAYS: { [day in DAYS]: number } = {
     Monday: 1,
     Tuesday: 2,
     Wednesday: 3,
@@ -15,6 +15,8 @@ export enum TASK_GRAIN {
     WEEK,
     DAY
 }
+
+export const EMPTY_FILTER_KEY = -9999;
 
 export const REFRESH_TIME = 'REFRESH_TIME';
 export type REFRESH_TIME = typeof REFRESH_TIME;
@@ -51,3 +53,9 @@ export type INVALIDATE_TASKS = typeof INVALIDATE_TASKS;
 
 export const UPLOAD_CHANGE = 'UPLOAD_CHANGE';
 export type UPLOAD_CHANGE = 'UPLOAD_CHANGE';
+
+export const SEARCH_TEXT_CHANGE = 'SEARCH_TEXT_CHANGE';
+export type SEARCH_TEXT_CHANGE = typeof SEARCH_TEXT_CHANGE;
+
+export const FILTER_TASKS = 'FILTER_TASKS';
+export type FILTER_TASKS = typeof FILTER_TASKS;

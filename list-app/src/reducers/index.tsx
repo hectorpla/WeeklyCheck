@@ -4,6 +4,7 @@ import { reducer as formReducer } from 'redux-form';
 // import { TaskAction } from '../actions';
 import { dayCardWeekActivationReducer } from './activeWeek';
 import { dayActivationReducer } from './day';
+import { taskListFilter } from './search';
 import { taskMultiplexReducer  } from './task';
 
 // Higer order reducer
@@ -21,10 +22,7 @@ export default combineReducers({
     activeDaySlice: dayActivationReducer,
     activeWeekSlice: dayCardWeekActivationReducer,
     allTaskListSlice: taskMultiplexReducer,
+    filterSlice: taskListFilter,
     form: formReducer,
 });
 
-// due to the nature of combineRed
-// TODO: shared states between sliced recuder:
-// dayCardWeekActivationReducer and TaskReducer
-// when updating a single task list, the list should know the activated week

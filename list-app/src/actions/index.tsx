@@ -1,3 +1,5 @@
+import { Dispatch } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
 import * as constants from '../constants/index';
 import * as types from '../types/index';
 
@@ -81,7 +83,7 @@ export type TaskAction = TaskListOpAction | TaskLoadAction;
 export type FilterAction = ChangeSearchText | FilterTasks;
 
 export type AppAction = ToggleAction | TaskAction | ActivateWeekOnDay |
-FilterAction;
+  FilterAction;
 
 
 export function activate(day: constants.DAYS): ActivateDay {
@@ -171,12 +173,34 @@ export function changeSearchText(text: string): ChangeSearchText {
   }
 }
 
-// TODO: thunk 
-export function filterTasks(day: constants.DAYS): FilterTasks {
-  // function(dispatch, getState)
+export type FilterActionThunkDispatch = ThunkDispatch<types.AppState, void, FilterAction>;
+export function notifySearchTextChange(text: string) {
+  // check if the text is parsable to a number
 
+  return (dispatch: FilterActionThunkDispatch) => {
+    dispatch(changeSearchText(text));
+    for (const day of constants.WEEK_DAY_ARRAY) {
+      dispatch(filterTasks(day))
+    }
+  }
+}
+
+export function filterTasksWithSource(day: constants.DAYS,
+  source: types.DailyTasks): FilterTasks {
   return {
     type: constants.FILTER_TASKS,
+    source,
     day
+  }
+}
+
+// TODO: thunk 
+export function filterTasks(day: constants.DAYS) {
+  return (dispatch: Dispatch<FilterTasks>,
+    getState: () => types.AppState) => {
+    const { allTaskListSlice, activeWeekSlice } = getState();
+    const activeWeek = activeWeekSlice[day];
+    dispatch(filterTasksWithSource(day, allTaskListSlice[day][activeWeek]));
+    return Promise.resolve();
   }
 }
