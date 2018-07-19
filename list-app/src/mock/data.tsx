@@ -1,4 +1,7 @@
-export const mockWeekTasks = {
+import { WeekTaskLists } from "../types";
+
+// TODO set readonly
+export const mockWeekTasks: WeekTaskLists = {
   Monday: [{ code: 12 }, { code: 23 }],
   Tuesday: [{ code: 111, description: "haha" }],
   Wednesday: [{ code: 11111 }, { code: 99 }, { code: 87 }],

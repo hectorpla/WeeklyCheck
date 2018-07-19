@@ -15,7 +15,7 @@ export function SimpleTaskList({ tasks }: Props) {
     // display: 'inline',
   }
   return (
-    <ul style={taskDivStyle}>
+    <div style={taskDivStyle}>
       {
         tasks.map((task: number, index: number) => {
           return (
@@ -23,6 +23,6 @@ export function SimpleTaskList({ tasks }: Props) {
           )
         })
       }
-    </ul>
+    </div>
   );
 }

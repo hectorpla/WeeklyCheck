@@ -11,13 +11,13 @@ export interface Props {
 function TaskItem({item, onDelete}: Props) {
     const handleDelete = () => onDelete();
     return (
-        <div> 
+        <ul> 
             <span> {item.code} </span>
             :
             <span> {item.description} </span>
             {/* tags */}
             <span className="right" onClick={handleDelete}> delete </span>
-        </div>
+        </ul>
     );
 }
 

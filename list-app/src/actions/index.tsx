@@ -182,6 +182,7 @@ export function notifySearchTextChange(text: string) {
     for (const day of constants.WEEK_DAY_ARRAY) {
       dispatch(filterTasks(day))
     }
+    return Promise.resolve();
   }
 }
 

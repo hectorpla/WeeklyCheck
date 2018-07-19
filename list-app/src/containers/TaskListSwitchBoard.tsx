@@ -23,6 +23,7 @@ export function mapDispatchToProps(dispatch: Dispatch<actions.ActivateWeekOnDay>
     ownProps: Props) {
     const { day } = ownProps;
     return {
+        // TODO: should dispatch filter action in addtion
         onWeekChange: (week: PrevCurNextKey) => dispatch(actions.setActiveWeekOnDay(day, week))
     }
 }

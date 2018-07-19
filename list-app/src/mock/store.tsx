@@ -1,15 +1,19 @@
-import { AppState, DailyTasks, PrevCurNextTaskLists, Task } from "../types";
+import { AppState, DailyTasks, PrevCurNextTaskLists, Task, TaskFilterState, FetchableItemStatus } from "../types";
 import { mockWeekTasks } from './data';
 import { DAYS, EMPTY_FILTER_KEY } from "../constants";
 
+export function createReadyTaskStatus(): FetchableItemStatus {
+  return {
+    fetched: true,
+    isFetching: false,
+    didInvalidate: false,
+    isFetchFailed: true
+  };
+}
+
 function createEmptyDailyTasks(tasks: Task[] = []): DailyTasks {
   return {
-    status: {
-      fetched: true,
-      isFetching: false,
-      didInvalidate: false,
-      isFetchFailed: true
-    },
+    status: createReadyTaskStatus(),
     list: []
   };
 }
@@ -23,40 +27,42 @@ function createPrevCurNextTaskListwithCur(day: DAYS): PrevCurNextTaskLists {
 }
 
 // much boilerplate: for whole structure reference
-export const mockState: AppState = {
-  activeDaySlice: {
-    activeDay: undefined,
-    currentTime: new Date()
-  },
-  activeWeekSlice: {
-    Monday: "cur",
-    Tuesday: "cur",
-    Wednesday: "cur",
-    Thursday: "cur",
-    Friday: "cur",
-    Saturday: "cur",
-    Sunday: "cur"
-  },
-  allTaskListSlice: {
-    Monday: createPrevCurNextTaskListwithCur('Monday'),
-    Tuesday: createPrevCurNextTaskListwithCur('Tuesday'),
-    Wednesday: createPrevCurNextTaskListwithCur('Wednesday'),
-    Thursday: createPrevCurNextTaskListwithCur('Thursday'),
-    Friday: createPrevCurNextTaskListwithCur('Friday'),
-    Saturday: createPrevCurNextTaskListwithCur('Saturday'),
-    Sunday: createPrevCurNextTaskListwithCur('Sunday')
-  },
-  filterSlice: {
-    fileredLists: {
-      Monday: [],
-      Tuesday: [],
-      Wednesday: [],
-      Thursday: [],
-      Friday: [],
-      Saturday: [],
-      Sunday: []
+export const createMockState: () => AppState = () => {
+  return {
+    activeDaySlice: {
+      activeDay: undefined,
+      currentTime: new Date()
     },
-    filterKey: EMPTY_FILTER_KEY
-  },
-  form: {}
+    activeWeekSlice: {
+      Monday: "cur",
+      Tuesday: "cur",
+      Wednesday: "cur",
+      Thursday: "cur",
+      Friday: "cur",
+      Saturday: "cur",
+      Sunday: "cur"
+    },
+    allTaskListSlice: {
+      Monday: createPrevCurNextTaskListwithCur('Monday'),
+      Tuesday: createPrevCurNextTaskListwithCur('Tuesday'),
+      Wednesday: createPrevCurNextTaskListwithCur('Wednesday'),
+      Thursday: createPrevCurNextTaskListwithCur('Thursday'),
+      Friday: createPrevCurNextTaskListwithCur('Friday'),
+      Saturday: createPrevCurNextTaskListwithCur('Saturday'),
+      Sunday: createPrevCurNextTaskListwithCur('Sunday')
+    },
+    filterSlice: {
+      fileredLists: {
+        Monday: [],
+        Tuesday: [],
+        Wednesday: [],
+        Thursday: [],
+        Friday: [],
+        Saturday: [],
+        Sunday: []
+      },
+      filterKey: EMPTY_FILTER_KEY
+    },
+    form: {}
+  }
 }
