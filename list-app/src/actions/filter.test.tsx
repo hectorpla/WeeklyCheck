@@ -1,10 +1,11 @@
 import configureMockStore, { MockStoreEnhanced } from 'redux-mock-store';
 import thunk, { ThunkDispatch } from 'redux-thunk';
-import { notifySearchTextChange, FilterActionThunkDispatch, ChangeSearchText, FilterTasks, changeSearchText, FilterAction } from './index';
+import { notifySearchTextChange, FilterActionThunkDispatch, ChangeSearchText, FilterTasks, FilterAction } from './index';
 import { AppState } from '../types';
 import { SEARCH_TEXT_CHANGE, FILTER_TASKS } from '../constants';
 import { createMockState, createReadyTaskStatus } from '../mock/store';
 import { mockWeekTasks } from '../mock/data';
+import {} from '.'
 
 // copy from the result of configureMockStore
 type MockStore = MockStoreEnhanced<AppState, ThunkDispatch<AppState, void, FilterAction>>;
@@ -41,21 +42,21 @@ describe('filter thunk action', () => {
   });
 });
 
-describe('filter thunk reducer', () => {
-  let store: MockStore;
-  const expectedFullWeekTasks = mockWeekTasks;
-  beforeEach(() => {
-    store = mockStore(createMockState());
-  })
+// describe('filter thunk reducer', () => {
+//   let store: MockStore;
+//   const expectedFullWeekTasks = mockWeekTasks;
+//   beforeEach(() => {
+//     store = mockStore(createMockState());
+//   })
 
-  it('should pass all tasks when given empty input', () => {
-    return store.dispatch(notifySearchTextChange("")).then(() => {
-      expect(store.getState().filterSlice.fileredLists)
-        .toEqual(expectedFullWeekTasks);
-    });
-  })
+//   it('should pass all tasks when given empty input', () => {
+//     return store.dispatch(notifySearchTextChange("")).then(() => {
+//       expect(store.getState().filterSlice.fileredLists)
+//         .toEqual(expectedFullWeekTasks);
+//     });
+//   })
 
-  it('should filter out unmatched tasks when search text changes', () => {
+//   it('should filter out unmatched tasks when search text changes', () => {
 
-  })
-});
+//   })
+// });
