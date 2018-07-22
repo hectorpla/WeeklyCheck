@@ -17,7 +17,7 @@ function createOneWeekTasks() {
     status: {
       fetched: false,
       isFetching: false,
-      didInvalidate: false,
+      didInvalidate: true, // ? set to true?
       isFetchFailed: false
     }
   }
@@ -93,6 +93,7 @@ function taskDisplayReducer(
           ...status,
           fetched: true,
           isFetching: false,
+          didInvalidate: false
         }
       }
     default: return state;

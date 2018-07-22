@@ -1,6 +1,6 @@
-import { AppState, DailyTasks, PrevCurNextTaskLists, Task, FetchableItemStatus } from "../types";
-import { mockWeekTasks } from './data';
 import { DAYS, EMPTY_FILTER_KEY } from "../constants";
+import { AppState, DailyTasks, FetchableItemStatus, PrevCurNextTaskLists, Task } from "../types";
+import { mockWeekTasks } from './data';
 
 export function createReadyTaskStatus(): FetchableItemStatus {
   return {

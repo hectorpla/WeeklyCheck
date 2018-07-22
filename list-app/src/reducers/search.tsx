@@ -2,7 +2,6 @@ import { FilterAction, FilterTasks } from "../actions";
 import { EMPTY_FILTER_KEY, FILTER_TASKS, SEARCH_TEXT_CHANGE } from "../constants";
 import { TaskFilterState, WeekTaskLists } from "../types";
 
-
 // TODO: action creator with thunk helps with accessing the other slice of the App state
 function createFilterLists(): WeekTaskLists {
   return {
@@ -35,13 +34,18 @@ export function taskListFilter(
   const { fileredLists, filterKey } = state;
   const { day, source } = action as FilterTasks;
 
+  // ? should check validation here, TODO: correct use of status
+  const filteredItems = source.status.didInvalidate ?
+    [] :
+    source.list.filter(
+      task => task.code === filterKey || filterKey === EMPTY_FILTER_KEY
+    ) // TODO: bug, invalid input like "ad"
+
   return {
     ...state,
     fileredLists: {
       ...fileredLists,
-      [day]: source.list.filter(
-        task => task.code === filterKey || filterKey === EMPTY_FILTER_KEY
-      ) // TODO: bug, invalid input like "ad"
+      [day]: filteredItems
     }
   }
 }

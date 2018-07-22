@@ -1,9 +1,9 @@
-import { TaskFilterState, AppState, DailyTasks } from '../types';
+import { changeSearchText, filterTasksWithSource } from '../actions';
+import { DAYS, EMPTY_FILTER_KEY, WEEK_DAY_ARRAY } from '../constants';
 import { createMockState } from '../mock/store';
-import { mockWeekTasks } from '../mock/data';
+import { AppState, DailyTasks, TaskFilterState } from '../types';
+// import { mockWeekTasks } from '../mock/data';
 import { taskListFilter as reducer } from './search';
-import { filterTasksWithSource, changeSearchText } from '../actions';
-import { EMPTY_FILTER_KEY, DAYS, WEEK_DAY_ARRAY } from '../constants';
 
 // copy from the result of configureMockStore
 
@@ -15,7 +15,7 @@ import { EMPTY_FILTER_KEY, DAYS, WEEK_DAY_ARRAY } from '../constants';
 describe('filter reducer', () => {
   let wholeState: AppState;
   let filterState: TaskFilterState;
-  const expectedFullWeekTasks = mockWeekTasks;
+  // const expectedFullWeekTasks = mockWeekTasks;
 
   beforeEach(() => {
     wholeState = createMockState();
@@ -53,28 +53,28 @@ describe('filter reducer', () => {
     });
   });
 
-  type StringToDailyTasks = { [day: string]: DailyTasks };
+  interface StringToDailyTasks { [day: string]: DailyTasks }
   describe('filter task actions', () => {
     // type loose coupled with the properties: 
     let sources: StringToDailyTasks;
-    let emptySources: StringToDailyTasks;
+    // let emptySources: StringToDailyTasks;
     beforeAll(() => {
       const { allTaskListSlice } = wholeState;
 
       // construct source of truths of daily tasks
       sources = WEEK_DAY_ARRAY.reduce(
-        (obj: Object, day: DAYS) => {
-          return { ...obj, [day]: allTaskListSlice[day]['cur'] }
+        (obj: object, day: DAYS) => {
+          return { ...obj, [day]: allTaskListSlice[day].cur }
         },
         {}
       );
 
-      emptySources = WEEK_DAY_ARRAY.reduce(
-        (obj: Object, day: DAYS) => {
-          return { ...obj, [day]: [] }
-        },
-        {}
-      );
+      // emptySources = WEEK_DAY_ARRAY.reduce(
+      //   (obj: Object, day: DAYS) => {
+      //     return { ...obj, [day]: [] }
+      //   },
+      //   {}
+      // );
     });
 
     // boilerplate ...
